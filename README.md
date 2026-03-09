@@ -54,6 +54,14 @@ This project was built to practice:
 * State management in Compose
 * Basic Android project structure
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/home.png" width="250">
+  <img src="screenshots/add_task.png" width="250">
+  <img src="screenshots/completed.png" width="250">
+</p>
+
 ## Future Improvements
 
 * Task persistence using Room database
