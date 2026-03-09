@@ -53,7 +53,6 @@ This project was built to practice:
 * Jetpack Compose UI
 * State management in Compose
 * Basic Android project structure
-* Using Git and GitHub for version control
 
 ## Future Improvements
 
