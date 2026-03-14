@@ -13,6 +13,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.kunvarpreet.to_dolist.data.Task
@@ -39,6 +41,9 @@ fun TaskItem(
 
     SwipeToDismissBox(
         state = dismissState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp)),
         enableDismissFromStartToEnd = false,
         enableDismissFromEndToStart = true,
         backgroundContent = {
@@ -63,15 +68,20 @@ fun TaskItem(
         },
         content = {
             Card(
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 8.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
+                    .fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(

@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 TodoScreen(
                     viewModel = viewModel,
+                    isDarkTheme = darkTheme,
                     onToggleTheme = { darkTheme = !darkTheme }
                 )
             }

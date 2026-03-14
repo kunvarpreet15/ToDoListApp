@@ -3,6 +3,7 @@ package com.kunvarpreet.to_dolist.ui
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +16,12 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -35,6 +41,7 @@ import java.util.Locale
 @Composable
 fun TodoScreen(
     viewModel: TaskViewModel,
+    isDarkTheme: Boolean,
     onToggleTheme: () -> Unit
 ) {
     val tasks by viewModel.tasks.collectAsState()
@@ -105,6 +112,7 @@ fun TodoScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(tasks, key = { it.id }) { task ->
+                Box(modifier = Modifier.padding(vertical = 4.dp)) {
                 TaskItem(
                     task = task,
                     onDelete = { viewModel.deleteTask(task) },
@@ -113,23 +121,32 @@ fun TodoScreen(
                     }
                 )
             }
+            }
         }
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 4.dp)
-                .navigationBarsPadding(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .navigationBarsPadding()
         ) {
             Button(
-                onClick = { viewModel.clearAllTasks() }
+                onClick = { viewModel.clearAllTasks() },
+                modifier = Modifier.align(Alignment.Center)
             ) {
                 Text("Clear All")
             }
-            Button(
-                onClick = onToggleTheme
+            IconButton(
+                onClick = onToggleTheme,
+                modifier = Modifier.align(Alignment.CenterEnd)
             ) {
-                Text("Toggle Theme")
+                Icon(
+                    imageVector =
+                        if(isDarkTheme)
+                            Icons.Default.LightMode
+                    else
+                            Icons.Default.DarkMode,
+                    contentDescription = "Toggle Theme"
+                )
             }
         }
     }
