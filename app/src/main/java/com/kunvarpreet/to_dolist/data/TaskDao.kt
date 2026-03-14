@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.Flow
 interface TaskDao {
     @Query("SELECT * FROM tasks ORDER BY id DESC")
     fun getAllTasks(): Flow<List<Task>>
+    @Query("DELETE FROM tasks")
+    suspend fun clearAll()
     @Insert
     suspend fun insertTask(task: Task)
     @Delete

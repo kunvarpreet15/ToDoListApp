@@ -34,4 +34,9 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
             dao.updateTask(task.copy(isDone = checked))
         }
     }
+    fun clearAllTasks() {
+        viewModelScope.launch {
+            dao.clearAll()
+        }
+    }
 }

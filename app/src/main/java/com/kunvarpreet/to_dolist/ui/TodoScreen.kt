@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
@@ -32,7 +33,10 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun TodoScreen(viewModel: TaskViewModel) {
+fun TodoScreen(
+    viewModel: TaskViewModel,
+    onToggleTheme: () -> Unit
+) {
     val tasks by viewModel.tasks.collectAsState()
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
@@ -81,6 +85,7 @@ fun TodoScreen(viewModel: TaskViewModel) {
                 Text("Add")
             }
         }
+        Spacer(modifier = Modifier.height(4.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -94,8 +99,9 @@ fun TodoScreen(viewModel: TaskViewModel) {
                 Text(selectedTime.ifEmpty { "Pick Time" })
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(tasks, key = { it.id }) { task ->
@@ -106,6 +112,24 @@ fun TodoScreen(viewModel: TaskViewModel) {
                         viewModel.toggleTask(task, it)
                     }
                 )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp)
+                .navigationBarsPadding(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(
+                onClick = { viewModel.clearAllTasks() }
+            ) {
+                Text("Clear All")
+            }
+            Button(
+                onClick = onToggleTheme
+            ) {
+                Text("Toggle Theme")
             }
         }
     }
