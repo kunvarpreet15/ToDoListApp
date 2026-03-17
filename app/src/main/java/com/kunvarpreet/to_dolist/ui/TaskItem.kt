@@ -72,7 +72,7 @@ fun TaskItem(
                     defaultElevation = 8.dp
                 ),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
                 modifier = Modifier
                     .fillMaxWidth(),
