@@ -1,6 +1,7 @@
 # ToDo List Android App
 
-A simple To-Do List Android application built using **Kotlin** and **Jetpack Compose**.
+A modern Task Management Android App built using **Kotlin + Jetpack Compose.**
+This app helps users organize tasks efficiently with smart categorization like **Today, Upcoming, and Overdue,** along with a redesigned UI for better usability.
 This project was created as part of learning modern Android development.
 
 ## Features
@@ -8,7 +9,8 @@ This project was created as part of learning modern Android development.
 * Add tasks to a to-do list
 * Mark tasks as completed using a checkbox
 * Delete tasks from the list
-* Clean and simple UI built with Jetpack Compose
+* Date & Time based task scheduling
+* Modern UI built with Jetpack Compose
 
 ## Tech Stack
 
@@ -62,13 +64,17 @@ This project was built to practice:
   <img src="screenshots/completed.png" width="200">
   <img src="screenshots/overdue.png" width="200">
 </p>
+## Key Improvements (Recent Updates)
+* Switched to a cleaner, more structured layout
+* Improved readability and task hierarchy
+* Better spacing, typography, and visual clarity
 
 ## Future Improvements
 
 * Task persistence using Room database
 * Edit existing tasks
 * Task categories
-* Dark mode support
+* Notifications & reminders
 
 ## License
 
