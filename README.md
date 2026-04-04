@@ -59,7 +59,8 @@ This project was built to practice:
 <p align="center">
   <img src="screenshots/home.png" width="250">
   <img src="screenshots/add_task.png" width="250">
-  <img src="screenshots/complete_task.png" width="250">
+  <img src="screenshots/completed.png" width="250">
+  <img src="screenshots/overdue.png" width="250">
 </p>
 
 ## Future Improvements
