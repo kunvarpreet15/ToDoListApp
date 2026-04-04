@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 @Database(
     entities = [Task::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class TaskDatabase : RoomDatabase() {
@@ -16,10 +16,10 @@ abstract class TaskDatabase : RoomDatabase() {
         fun getDatabase(context: Context): TaskDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    TaskDatabase::class.java,
-                    "task_db"
-                ).build()
+                                context.applicationContext,
+                                TaskDatabase::class.java,
+                                "task_db"
+                            ).fallbackToDestructiveMigration(false).build()
                 INSTANCE = instance
                 instance
             }

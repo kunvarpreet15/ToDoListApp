@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp") version "2.3.6"
 }
-
 android {
     namespace = "com.kunvarpreet.to_dolist"
     compileSdk {
@@ -11,17 +10,14 @@ android {
             minorApiLevel = 1
         }
     }
-
     defaultConfig {
         applicationId = "com.kunvarpreet.to_dolist"
         minSdk = 30
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -32,6 +28,9 @@ android {
             )
         }
     }
+    buildTypes.all {
+        isCrunchPngs = false
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -40,8 +39,11 @@ android {
         compose = true
     }
 }
-
 dependencies {
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.material3.window.size.class1)
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.room.runtime)
@@ -50,6 +52,7 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.ui.text)
+    implementation(libs.androidx.ui)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
 class TaskViewModel(application: Application) : AndroidViewModel(application) {
     private val dao = TaskDatabase
         .getDatabase(application)
@@ -19,9 +20,16 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
                 SharingStarted.WhileSubscribed(),
                 emptyList()
             )
-    fun addTask(title: String, date: String, time: String) {
+    fun addTask(title: String, date: Long?, time: Long?) {
         viewModelScope.launch {
-            dao.insertTask(Task(title = title, date = date, time = time))
+            val combinedMillis = time ?: date
+            dao.insertTask(
+                Task(
+                    title = title,
+                    dateMillis = combinedMillis,
+                    timeMillis = time
+                )
+            )
         }
     }
     fun deleteTask(task: Task) {

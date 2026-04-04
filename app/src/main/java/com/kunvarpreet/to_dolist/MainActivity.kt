@@ -12,7 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.kunvarpreet.to_dolist.ui.TodoScreen
+import com.kunvarpreet.to_dolist.ui.screens.MainScreen
 import com.kunvarpreet.to_dolist.ui.theme.ToDoListTheme
 import com.kunvarpreet.to_dolist.viewmodel.TaskViewModel
 
@@ -28,11 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    TodoScreen(
-                        viewModel = viewModel,
-                        isDarkTheme = darkTheme,
-                        onToggleTheme = { darkTheme = !darkTheme }
-                    )
+                    MainScreen(viewModel)
                 }
             }
         }

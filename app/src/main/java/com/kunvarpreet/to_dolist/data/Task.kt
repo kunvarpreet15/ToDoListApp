@@ -6,7 +6,7 @@ data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String,
-    val date: String = "",
-    val time: String = "",
+    val dateMillis: Long? = null,
+    val timeMillis: Long? = null,
     var isDone: Boolean = false
 )
