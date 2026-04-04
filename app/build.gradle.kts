@@ -40,12 +40,11 @@ android {
     }
 }
 dependencies {
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.compose.material3.window.size.class1)
-    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
-    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.coroutines.android)

@@ -12,8 +12,7 @@ kotlin = "2.3.20"
 composeBom = "2026.03.01"
 material = "1.10.6"
 material3 = "1.4.0"
-material3AdaptiveNavigationSuite = "1.5.0-alpha16"
-materialIconsExtended = "1.7.8"
+materialIconsCore = "1.7.8"
 roomRuntime = "2.8.4"
 runtime = "1.10.6"
 foundation = "1.10.6"
@@ -23,9 +22,8 @@ ui = "1.10.6"
 [libraries]
 androidx-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
 androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "material" }
-androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
-androidx-compose-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3AdaptiveNavigationSuite" }
-androidx-compose-material3-window-size-class1 = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3" }
+androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsCore" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
