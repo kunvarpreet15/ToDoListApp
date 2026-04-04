@@ -40,6 +40,7 @@ import java.util.Calendar
 fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
     val tasks by viewModel.tasks.collectAsState()
     val listState = rememberLazyListState()
+    val now = System.currentTimeMillis()
     val today = getTodayDate()
     val todayCalendar = Calendar.getInstance()
     todayCalendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -51,11 +52,11 @@ fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
     val tomorrowStart = todayCalendar.timeInMillis
     val sortedTasks = tasks.sortedBy { it.dateMillis ?: Long.MAX_VALUE }
     val overdueTasks = sortedTasks.filter {
-        it.dateMillis != null && it.dateMillis < todayStart
+        it.dateMillis != null && it.dateMillis < now
     }
     val todayTasksRaw = sortedTasks.filter {
         it.dateMillis != null &&
-                it.dateMillis >= todayStart &&
+                it.dateMillis >= now &&
                 it.dateMillis < tomorrowStart
     }
     val upcomingTasksRaw = sortedTasks.filter {

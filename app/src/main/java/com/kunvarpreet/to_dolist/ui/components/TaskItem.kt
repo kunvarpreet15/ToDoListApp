@@ -45,6 +45,7 @@ fun TaskItem(
     val dateText = formatDate(task.dateMillis)
     val timeText = formatTime(task.timeMillis)
     val todayCalendar = Calendar.getInstance()
+    val now = System.currentTimeMillis()
     todayCalendar.set(Calendar.HOUR_OF_DAY, 0)
     todayCalendar.set(Calendar.MINUTE, 0)
     todayCalendar.set(Calendar.SECOND, 0)
@@ -88,7 +89,7 @@ fun TaskItem(
                         defaultElevation = 8.dp
                     ),
                     colors = CardDefaults.cardColors(
-                        if (it < todayStart) {
+                        if (it < now) {
                             MaterialTheme.colorScheme.errorContainer
                         } else {
                             MaterialTheme.colorScheme.surfaceVariant
