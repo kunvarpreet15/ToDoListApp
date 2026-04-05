@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp") version "2.3.6"
+    alias(libs.plugins.ksp)
 }
 android {
     namespace = "com.kunvarpreet.to_dolist"
@@ -14,8 +14,8 @@ android {
         applicationId = "com.kunvarpreet.to_dolist"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -1,6 +1,8 @@
 [versions]
 agp = "9.1.0"
+kotlin = "2.3.20"
 animation = "1.11.0-beta02"
+ksp = "2.3.6"
 coreKtx = "1.18.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -8,7 +10,6 @@ espressoCore = "3.7.0"
 kotlinxCoroutinesAndroid = "1.10.2"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-kotlin = "2.3.20"
 composeBom = "2026.03.01"
 material = "1.10.6"
 material3 = "1.4.0"
@@ -51,4 +52,5 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
