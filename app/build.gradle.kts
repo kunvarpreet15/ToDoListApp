@@ -8,9 +8,7 @@ plugins {
 android {
     namespace = "com.kunvarpreet.to_dolist"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(37)
     }
     defaultConfig {
         applicationId = "com.kunvarpreet.to_dolist"
@@ -58,7 +56,6 @@ dependencies {
     runtimeOnly(libs.kotlinx.coroutines.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugRuntimeOnly(libs.androidx.compose.ui.test.manifest)
 }

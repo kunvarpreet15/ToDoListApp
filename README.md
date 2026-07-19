@@ -64,9 +64,7 @@ This project was built to practice:
   <img src="screenshots/completed.png" width="200">
   <img src="screenshots/overdue.png" width="200">
 </p>
-
-## Key Improvements (Recent Updates);
-
+## Key Improvements (Recent Updates)
 * Switched to a cleaner, more structured layout
 * Improved readability and task hierarchy
 * Better spacing, typography, and visual clarity
