@@ -32,8 +32,8 @@ fun EditTaskSheet(
     onSave: (String, Long?, Long?) -> Unit
 ) {
     var taskText by remember(task) { mutableStateOf(task.title) }
-    val selectedDateMillis = remember(task) { mutableStateOf<Long?>(task.dateMillis) }
-    val selectedTimeMillis = remember(task) { mutableStateOf<Long?>(task.timeMillis) }
+    val selectedDateMillis = remember(task) { mutableStateOf(task.dateMillis) }
+    val selectedTimeMillis = remember(task) { mutableStateOf(task.timeMillis) }
     val context = LocalContext.current
 
     val initialCalendar = Calendar.getInstance().apply {
