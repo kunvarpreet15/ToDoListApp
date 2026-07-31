@@ -32,14 +32,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.kunvarpreet.to_dolist.data.Task
+import com.kunvarpreet.to_dolist.ui.components.EditTaskSheet
 import com.kunvarpreet.to_dolist.ui.components.TaskItem
 import com.kunvarpreet.to_dolist.viewmodel.TaskViewModel
 import java.util.Calendar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
     val tasks by viewModel.tasks.collectAsState()
     val listState = rememberLazyListState()
+    var taskToEdit by remember { mutableStateOf<Task?>(null) }
+    val editSheetState = rememberModalBottomSheetState()
     val now = System.currentTimeMillis()
     val today = getTodayDate()
     val todayCalendar = Calendar.getInstance()
@@ -99,95 +110,113 @@ fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            return@Column
-        }
-        Box(modifier = Modifier.weight(1f)) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = listState,
-                contentPadding = PaddingValues(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 8.dp,
-                    bottom = 80.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                if (overdueTasks.isNotEmpty()) {
-                    item {
-                        SectionHeader("Overdue")
-                    }
+        } else {
+            Box(modifier = Modifier.weight(1f)) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = listState,
+                    contentPadding = PaddingValues(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 8.dp,
+                        bottom = 80.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    if (overdueTasks.isNotEmpty()) {
+                        item {
+                            SectionHeader("Overdue")
+                        }
 
-                    items(overdueTasks, key = { it.id }) { task ->
-                        androidx.compose.animation.AnimatedVisibility(
-                            visible = true,
-                            enter = fadeIn() + scaleIn(),
-                            exit = fadeOut() + scaleOut()
-                        ) {
-                            TaskItem(
-                                task = task,
-                                onDelete = { viewModel.deleteTask(task) },
-                                onCheckedChange = {
-                                    viewModel.toggleTask(task, it)
-                                }
-                            )
+                        items(overdueTasks, key = { it.id }) { task ->
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = true,
+                                enter = fadeIn() + scaleIn(),
+                                exit = fadeOut() + scaleOut()
+                            ) {
+                                TaskItem(
+                                    task = task,
+                                    onDelete = { viewModel.deleteTask(task) },
+                                    onCheckedChange = {
+                                        viewModel.toggleTask(task, it)
+                                    },
+                                    onEdit = { taskToEdit = task }
+                                )
+                            }
+                        }
+                    }
+                    if (todayTasks.isNotEmpty()) {
+                        item {
+                            SectionHeader("Today")
+                        }
+                        items(todayTasks, key = { it.id }) { task ->
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = true,
+                                enter = fadeIn() + scaleIn(),
+                                exit = fadeOut() + scaleOut()
+                            ) {
+                                TaskItem(
+                                    task = task,
+                                    onDelete = { viewModel.deleteTask(task) },
+                                    onCheckedChange = {
+                                        viewModel.toggleTask(task, it)
+                                    },
+                                    onEdit = { taskToEdit = task }
+                                )
+                            }
+                        }
+
+                    }
+                    if (upcomingTasks.isNotEmpty()) {
+
+                        item {
+                            SectionHeader("Upcoming")
+                        }
+
+                        items(upcomingTasks, key = { it.id }) { task ->
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = true,
+                                enter = fadeIn() + scaleIn(),
+                                exit = fadeOut() + scaleOut()
+                            ) {
+                                TaskItem(
+                                    task = task,
+                                    onDelete = { viewModel.deleteTask(task) },
+                                    onCheckedChange = {
+                                        viewModel.toggleTask(task, it)
+                                    },
+                                    onEdit = { taskToEdit = task }
+                                )
+                            }
                         }
                     }
                 }
-                if (todayTasks.isNotEmpty()) {
-                    item {
-                        SectionHeader("Today")
-                    }
-                    items(todayTasks, key = { it.id }) { task ->
-                        androidx.compose.animation.AnimatedVisibility(
-                            visible = true,
-                            enter = fadeIn() + scaleIn(),
-                            exit = fadeOut() + scaleOut()
-                        ) {
-                            TaskItem(
-                                task = task,
-                                onDelete = { viewModel.deleteTask(task) },
-                                onCheckedChange = {
-                                    viewModel.toggleTask(task, it)
-                                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(Color.Transparent, MaterialTheme.colorScheme.background)
                             )
-                        }
-                    }
-
-                }
-                if (upcomingTasks.isNotEmpty()) {
-
-                    item {
-                        SectionHeader("Upcoming")
-                    }
-
-                    items(upcomingTasks, key = { it.id }) { task ->
-                        androidx.compose.animation.AnimatedVisibility(
-                            visible = true,
-                            enter = fadeIn() + scaleIn(),
-                            exit = fadeOut() + scaleOut()
-                        ) {
-                            TaskItem(
-                                task = task,
-                                onDelete = { viewModel.deleteTask(task) },
-                                onCheckedChange = {
-                                    viewModel.toggleTask(task, it)
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(Color.Transparent, MaterialTheme.colorScheme.background)
                         )
-                    )
+                )
+            }
+        }
+    }
+
+    taskToEdit?.let { currentTask ->
+        ModalBottomSheet(
+            onDismissRequest = { taskToEdit = null },
+            sheetState = editSheetState
+        ) {
+            EditTaskSheet(
+                task = currentTask,
+                onSave = { updatedTitle, updatedDate, updatedTime ->
+                    viewModel.updateTask(currentTask, updatedTitle, updatedDate, updatedTime)
+                    taskToEdit = null
+                }
             )
         }
     }

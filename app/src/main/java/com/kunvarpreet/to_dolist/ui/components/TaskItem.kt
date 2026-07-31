@@ -33,24 +33,23 @@ import androidx.compose.ui.unit.dp
 import com.kunvarpreet.to_dolist.data.Task
 import java.util.Calendar
 
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.IconButton
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TaskItem(
     task: Task,
     modifier: Modifier = Modifier,
     onDelete: () -> Unit,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    onEdit: (() -> Unit)? = null
 ) {
     val dismissState = rememberSwipeToDismissBoxState()
     val dateText = formatDate(task.dateMillis)
     val timeText = formatTime(task.timeMillis)
-    val todayCalendar = Calendar.getInstance()
     val now = System.currentTimeMillis()
-    todayCalendar.set(Calendar.HOUR_OF_DAY, 0)
-    todayCalendar.set(Calendar.MINUTE, 0)
-    todayCalendar.set(Calendar.SECOND, 0)
-    todayCalendar.set(Calendar.MILLISECOND, 0)
-    val todayStart = todayCalendar.timeInMillis
+    val isOverdue = task.dateMillis != null && task.dateMillis < now && !task.isDone
     SwipeToDismissBox(
         state = dismissState,
         modifier = Modifier
@@ -83,49 +82,57 @@ fun TaskItem(
             }
         },
         content = {
-            task.dateMillis?.let {
-                Card(
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 8.dp
-                    ),
-                    colors = CardDefaults.cardColors(
-                        if (it < now) {
-                            MaterialTheme.colorScheme.errorContainer
-                        } else {
-                            MaterialTheme.colorScheme.surfaceVariant
-                        }
-                    ),
-                    modifier = modifier
+            Card(
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 8.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    if (isOverdue) {
+                        MaterialTheme.colorScheme.errorContainer
+                    } else {
+                        MaterialTheme.colorScheme.surfaceVariant
+                    }
+                ),
+                onClick = { if (!task.isDone) onEdit?.invoke() },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .alpha(if (task.isDone) 0.5f else 1f),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Row(
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .alpha(if (task.isDone) 0.5f else 1f),
-                    shape = RoundedCornerShape(20.dp)
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Checkbox(
+                        checked = task.isDone,
+                        onCheckedChange = onCheckedChange
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(
+                        modifier = Modifier.weight(1f)
                     ) {
-                        Checkbox(
-                            checked = task.isDone,
-                            onCheckedChange = onCheckedChange
+                        Text(
+                            text = task.title,
+                            style = MaterialTheme.typography.titleMedium,
+                            textDecoration =
+                                if (task.isDone)
+                                    TextDecoration.LineThrough
+                                else
+                                    TextDecoration.None
                         )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column(
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                text = task.title,
-                                style = MaterialTheme.typography.titleMedium,
-                                textDecoration =
-                                    if (task.isDone)
-                                        TextDecoration.LineThrough
-                                    else
-                                        TextDecoration.None
+                        if (dateText.isNotEmpty() || timeText.isNotEmpty()) {
+                            Text("$dateText $timeText")
+                        }
+                    }
+                    if (!task.isDone && onEdit != null) {
+                        IconButton(onClick = onEdit) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit task",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
-                            if (dateText.isNotEmpty() || timeText.isNotEmpty()) {
-                                Text("$dateText $timeText")
-                            }
                         }
                     }
                 }

@@ -42,6 +42,18 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
             dao.updateTask(task.copy(isDone = checked))
         }
     }
+    fun updateTask(task: Task, title: String, date: Long?, time: Long?) {
+        viewModelScope.launch {
+            val combinedMillis = time ?: date
+            dao.updateTask(
+                task.copy(
+                    title = title,
+                    dateMillis = combinedMillis,
+                    timeMillis = time
+                )
+            )
+        }
+    }
     fun clearAllTasks() {
         viewModelScope.launch {
             dao.clearAll()
