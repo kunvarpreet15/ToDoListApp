@@ -2,6 +2,7 @@
 activityCompose = "1.13.0"
 ada = "3.15.0"
 agp = "9.3.1"
+animatedsmoothbottomnavigationJetpackcompose = "1.1.2"
 composeBom = "2026.05.01"
 foundation = "1.11.2"
 junit = "4.13.2"
@@ -32,6 +33,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+animatedsmoothbottomnavigation-jetpackcompose = { module = "com.github.PratikFagadiya:AnimatedSmoothBottomNavigation-JetpackCompose", version.ref = "animatedsmoothbottomnavigationJetpackcompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 

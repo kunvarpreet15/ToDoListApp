@@ -13,7 +13,7 @@ interface TaskDao {
     @Query("DELETE FROM tasks")
     suspend fun clearAll()
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTask(task: Task)
+    suspend fun insertTask(task: Task): Long
     @Delete
     suspend fun deleteTask(task: Task)
     @Update

@@ -1,4 +1,5 @@
 package com.kunvarpreet.to_dolist.ui.components
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,15 +8,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -31,10 +37,6 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.kunvarpreet.to_dolist.data.Task
-import java.util.Calendar
-
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.IconButton
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -43,13 +45,15 @@ fun TaskItem(
     modifier: Modifier = Modifier,
     onDelete: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
-    onEdit: (() -> Unit)? = null
+    onEdit: (() -> Unit)? = null,
+    onReminderToggle: ((Boolean) -> Unit)? = null
 ) {
     val dismissState = rememberSwipeToDismissBoxState()
     val dateText = formatDate(task.dateMillis)
     val timeText = formatTime(task.timeMillis)
     val now = System.currentTimeMillis()
     val isOverdue = task.dateMillis != null && task.dateMillis < now && !task.isDone
+
     SwipeToDismissBox(
         state = dismissState,
         modifier = Modifier
@@ -77,7 +81,9 @@ fun TaskItem(
                     imageVector = Icons.Default.Delete,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onErrorContainer,
-                    modifier = Modifier.alpha(progress).scale(0.8f + (0.4f * progress))
+                    modifier = Modifier
+                        .alpha(progress)
+                        .scale(0.8f + (0.4f * progress))
                 )
             }
         },
@@ -122,8 +128,32 @@ fun TaskItem(
                                 else
                                     TextDecoration.None
                         )
-                        if (dateText.isNotEmpty() || timeText.isNotEmpty()) {
-                            Text("$dateText $timeText")
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            if (dateText.isNotEmpty() || timeText.isNotEmpty()) {
+                                Text(
+                                    text = "$dateText $timeText",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            if (task.hasReminder) {
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Icon(
+                                    imageVector = Icons.Default.Notifications,
+                                    contentDescription = "Reminder active",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+                    }
+                    if (!task.isDone && onReminderToggle != null) {
+                        IconButton(onClick = { onReminderToggle(!task.hasReminder) }) {
+                            Icon(
+                                imageVector = if (task.hasReminder) Icons.Default.Notifications else Icons.Outlined.NotificationsOff,
+                                contentDescription = "Toggle reminder",
+                                tint = if (task.hasReminder) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     }
                     if (!task.isDone && onEdit != null) {

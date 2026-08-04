@@ -21,23 +21,23 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.kunvarpreet.to_dolist.data.Task
 import com.kunvarpreet.to_dolist.ui.components.EditTaskSheet
 import com.kunvarpreet.to_dolist.ui.components.TaskItem
@@ -52,15 +52,14 @@ fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
     var taskToEdit by remember { mutableStateOf<Task?>(null) }
     val editSheetState = rememberModalBottomSheetState()
     val now = System.currentTimeMillis()
-    val today = getTodayDate()
     val todayCalendar = Calendar.getInstance()
     todayCalendar.set(Calendar.HOUR_OF_DAY, 0)
     todayCalendar.set(Calendar.MINUTE, 0)
     todayCalendar.set(Calendar.SECOND, 0)
     todayCalendar.set(Calendar.MILLISECOND, 0)
-    val todayStart = todayCalendar.timeInMillis
     todayCalendar.add(Calendar.DAY_OF_YEAR, 1)
     val tomorrowStart = todayCalendar.timeInMillis
+
     val sortedTasks = tasks.sortedBy { it.dateMillis ?: Long.MAX_VALUE }
     val overdueTasks = sortedTasks.filter {
         it.dateMillis != null && it.dateMillis < now
@@ -73,8 +72,11 @@ fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
     val upcomingTasksRaw = sortedTasks.filter {
         it.dateMillis != null && it.dateMillis >= tomorrowStart
     }
+    val unscheduledTasks = sortedTasks.filter { it.dateMillis == null }
+
     val todayTasks = todayTasksRaw.sortedBy { it.dateMillis ?: Long.MAX_VALUE }
     val upcomingTasks = upcomingTasksRaw.sortedBy { it.dateMillis ?: Long.MAX_VALUE }
+
     Column(
         modifier = Modifier
             .padding(padding)
@@ -140,7 +142,10 @@ fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
                                     onCheckedChange = {
                                         viewModel.toggleTask(task, it)
                                     },
-                                    onEdit = { taskToEdit = task }
+                                    onEdit = { taskToEdit = task },
+                                    onReminderToggle = {
+                                        viewModel.toggleReminder(task, it)
+                                    }
                                 )
                             }
                         }
@@ -161,18 +166,18 @@ fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
                                     onCheckedChange = {
                                         viewModel.toggleTask(task, it)
                                     },
-                                    onEdit = { taskToEdit = task }
+                                    onEdit = { taskToEdit = task },
+                                    onReminderToggle = {
+                                        viewModel.toggleReminder(task, it)
+                                    }
                                 )
                             }
                         }
-
                     }
                     if (upcomingTasks.isNotEmpty()) {
-
                         item {
                             SectionHeader("Upcoming")
                         }
-
                         items(upcomingTasks, key = { it.id }) { task ->
                             androidx.compose.animation.AnimatedVisibility(
                                 visible = true,
@@ -185,7 +190,34 @@ fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
                                     onCheckedChange = {
                                         viewModel.toggleTask(task, it)
                                     },
-                                    onEdit = { taskToEdit = task }
+                                    onEdit = { taskToEdit = task },
+                                    onReminderToggle = {
+                                        viewModel.toggleReminder(task, it)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    if (unscheduledTasks.isNotEmpty()) {
+                        item {
+                            SectionHeader("No Due Date")
+                        }
+                        items(unscheduledTasks, key = { it.id }) { task ->
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = true,
+                                enter = fadeIn() + scaleIn(),
+                                exit = fadeOut() + scaleOut()
+                            ) {
+                                TaskItem(
+                                    task = task,
+                                    onDelete = { viewModel.deleteTask(task) },
+                                    onCheckedChange = {
+                                        viewModel.toggleTask(task, it)
+                                    },
+                                    onEdit = { taskToEdit = task },
+                                    onReminderToggle = {
+                                        viewModel.toggleReminder(task, it)
+                                    }
                                 )
                             }
                         }
@@ -213,8 +245,14 @@ fun TaskListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
         ) {
             EditTaskSheet(
                 task = currentTask,
-                onSave = { updatedTitle, updatedDate, updatedTime ->
-                    viewModel.updateTask(currentTask, updatedTitle, updatedDate, updatedTime)
+                onSave = { updatedTitle, updatedDate, updatedTime, updatedHasReminder ->
+                    viewModel.updateTask(
+                        currentTask,
+                        updatedTitle,
+                        updatedDate,
+                        updatedTime,
+                        updatedHasReminder
+                    )
                     taskToEdit = null
                 }
             )
@@ -235,9 +273,4 @@ fun SectionHeader(title: String) {
             style = MaterialTheme.typography.titleMedium
         )
     }
-}
-
-fun getTodayDate(): String {
-    val cal = Calendar.getInstance()
-    return "${cal.get(Calendar.DAY_OF_MONTH)}/${cal.get(Calendar.MONTH) + 1}/${cal.get(Calendar.YEAR)}"
 }

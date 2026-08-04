@@ -1,4 +1,5 @@
 package com.kunvarpreet.to_dolist.ui.components
+
 import android.app.TimePickerDialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
@@ -20,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -29,11 +32,12 @@ import java.util.Locale
 
 @Composable
 fun AddTaskSheet(
-    onAdd: (String, Long?, Long?) -> Unit
+    onAdd: (String, Long?, Long?, Boolean) -> Unit
 ) {
     var taskText by remember { mutableStateOf("") }
     val selectedDateMillis = remember { mutableStateOf<Long?>(null) }
     val selectedTimeMillis = remember { mutableStateOf<Long?>(null) }
+    var hasReminder by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
     var showDatePicker by remember { mutableStateOf(false) }
@@ -45,6 +49,7 @@ fun AddTaskSheet(
     val selectedTime = selectedTimeMillis.value?.let {
         SimpleDateFormat("hh:mm a", Locale.getDefault()).format(it)
     } ?: ""
+
     if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
@@ -60,6 +65,7 @@ fun AddTaskSheet(
             DatePicker(state = dateState)
         }
     }
+
     val datePicker = remember {
         android.app.DatePickerDialog(
             context,
@@ -114,7 +120,8 @@ fun AddTaskSheet(
                 .fillMaxWidth()
                 .clickable { datePicker.show() }
                 .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Date")
             Text(selectedDate.ifEmpty { "Select" })
@@ -124,10 +131,24 @@ fun AddTaskSheet(
                 .fillMaxWidth()
                 .clickable { timePicker.show() }
                 .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Time")
             Text(selectedTime.ifEmpty { "Select" })
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Set Reminder")
+            Switch(
+                checked = hasReminder,
+                onCheckedChange = { hasReminder = it }
+            )
         }
         Spacer(Modifier.height(16.dp))
         Button(
@@ -136,7 +157,8 @@ fun AddTaskSheet(
                     onAdd(
                         taskText,
                         selectedDateMillis.value,
-                        selectedTimeMillis.value
+                        selectedTimeMillis.value,
+                        hasReminder
                     )
                 }
             },

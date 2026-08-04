@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -73,19 +72,12 @@ fun MainScreen(viewModel: TaskViewModel) {
                     icon = { Icon(Icons.Default.Notifications, null) },
                     label = { Text("Reminders") }
                 )
-                NavigationBarItem(
-                    selected = selectedTab == 2,
-                    onClick = { selectedTab = 2 },
-                    icon = { Icon(Icons.Default.Alarm, null) },
-                    label = { Text("Alarms") }
-                )
             }
         }
     ) { padding ->
         when (selectedTab) {
             0 -> TaskListScreen(viewModel, padding)
             1 -> ReminderListScreen(viewModel, padding)
-            2 -> AlarmListScreen(viewModel, padding)
         }
     }
     if (showSheet) {
@@ -94,8 +86,8 @@ fun MainScreen(viewModel: TaskViewModel) {
             sheetState = sheetState
         ) {
             AddTaskSheet(
-                onAdd = { title, date, time ->
-                    viewModel.addTask(title, date, time)
+                onAdd = { title, date, time, hasReminder ->
+                    viewModel.addTask(title, date, time, hasReminder)
                     showSheet = false
                 }
             )

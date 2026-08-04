@@ -1,9 +1,54 @@
+# ==========================
+# Android Studio / IntelliJ
+# ==========================
+.idea/
 *.iml
-.gradle
-.idea
-/local.properties
+
+# VS Code
+.vscode/
+
+# macOS / Windows
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+Thumbs.db
+Desktop.ini
+
+# ==========================
+# Local machine files
+# ==========================
+local.properties
+
+# ==========================
+# Gradle
+# ==========================
+.gradle/
+
+# Kotlin
+.kotlin/
+
+# ==========================
+# Build outputs
+# ==========================
+build/
+**/build/
+
+# Native build
+.externalNativeBuild/
+.cxx/
+
+# Android Studio captures
+captures/
+
+# Logs
+*.log
+
+# Temporary / Backup
+*.tmp
+*.temp
+*.bak
+*.orig
+*~
+
+# Signing keys
+*.jks
+*.keystore
+*.p12

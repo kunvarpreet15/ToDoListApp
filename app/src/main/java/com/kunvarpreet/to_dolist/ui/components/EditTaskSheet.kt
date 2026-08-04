@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -29,11 +31,12 @@ import java.util.Locale
 @Composable
 fun EditTaskSheet(
     task: Task,
-    onSave: (String, Long?, Long?) -> Unit
+    onSave: (String, Long?, Long?, Boolean) -> Unit
 ) {
     var taskText by remember(task) { mutableStateOf(task.title) }
     val selectedDateMillis = remember(task) { mutableStateOf(task.dateMillis) }
     val selectedTimeMillis = remember(task) { mutableStateOf(task.timeMillis) }
+    var hasReminder by remember(task) { mutableStateOf(task.hasReminder) }
     val context = LocalContext.current
 
     val initialCalendar = Calendar.getInstance().apply {
@@ -104,7 +107,8 @@ fun EditTaskSheet(
                 .fillMaxWidth()
                 .clickable { datePicker.show() }
                 .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Date")
             Text(selectedDate.ifEmpty { "Select" })
@@ -114,10 +118,24 @@ fun EditTaskSheet(
                 .fillMaxWidth()
                 .clickable { timePicker.show() }
                 .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Time")
             Text(selectedTime.ifEmpty { "Select" })
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Set Reminder")
+            Switch(
+                checked = hasReminder,
+                onCheckedChange = { hasReminder = it }
+            )
         }
         Spacer(Modifier.height(16.dp))
         Button(
@@ -126,7 +144,8 @@ fun EditTaskSheet(
                     onSave(
                         taskText,
                         selectedDateMillis.value,
-                        selectedTimeMillis.value
+                        selectedTimeMillis.value,
+                        hasReminder
                     )
                 }
             },

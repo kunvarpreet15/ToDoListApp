@@ -40,6 +40,7 @@ android {
     }
 }
 dependencies {
+    implementation(libs.animatedsmoothbottomnavigation.jetpackcompose)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)

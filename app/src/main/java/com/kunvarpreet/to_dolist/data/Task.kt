@@ -8,5 +8,6 @@ data class Task(
     val title: String,
     val dateMillis: Long? = null,
     val timeMillis: Long? = null,
-    var isDone: Boolean = false
+    var isDone: Boolean = false,
+    val hasReminder: Boolean = false
 )
