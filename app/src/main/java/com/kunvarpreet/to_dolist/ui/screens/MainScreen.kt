@@ -86,8 +86,8 @@ fun MainScreen(viewModel: TaskViewModel) {
             sheetState = sheetState
         ) {
             AddTaskSheet(
-                onAdd = { title, date, time, hasReminder ->
-                    viewModel.addTask(title, date, time, hasReminder)
+                onAdd = { title, date, time, hasReminder, repeatInterval ->
+                    viewModel.addTask(title, date, time, hasReminder, repeatInterval)
                     showSheet = false
                 }
             )

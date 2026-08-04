@@ -120,13 +120,14 @@ fun ReminderListScreen(viewModel: TaskViewModel, padding: PaddingValues) {
         ) {
             EditTaskSheet(
                 task = currentTask,
-                onSave = { updatedTitle, updatedDate, updatedTime, updatedHasReminder ->
+                onSave = { updatedTitle, updatedDate, updatedTime, updatedHasReminder, updatedRepeatInterval ->
                     viewModel.updateTask(
                         currentTask,
                         updatedTitle,
                         updatedDate,
                         updatedTime,
-                        updatedHasReminder
+                        updatedHasReminder,
+                        updatedRepeatInterval
                     )
                     taskToEdit = null
                 }

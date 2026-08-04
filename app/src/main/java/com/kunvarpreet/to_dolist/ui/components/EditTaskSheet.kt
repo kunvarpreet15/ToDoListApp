@@ -3,6 +3,7 @@ package com.kunvarpreet.to_dolist.ui.components
 import android.app.TimePickerDialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -23,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.kunvarpreet.to_dolist.data.RepeatInterval
 import com.kunvarpreet.to_dolist.data.Task
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -31,12 +35,15 @@ import java.util.Locale
 @Composable
 fun EditTaskSheet(
     task: Task,
-    onSave: (String, Long?, Long?, Boolean) -> Unit
+    onSave: (String, Long?, Long?, Boolean, RepeatInterval) -> Unit
 ) {
     var taskText by remember(task) { mutableStateOf(task.title) }
     val selectedDateMillis = remember(task) { mutableStateOf(task.dateMillis) }
     val selectedTimeMillis = remember(task) { mutableStateOf(task.timeMillis) }
     var hasReminder by remember(task) { mutableStateOf(task.hasReminder) }
+    var repeatInterval by remember(task) { mutableStateOf(task.repeatInterval) }
+    var showRepeatMenu by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
 
     val initialCalendar = Calendar.getInstance().apply {
@@ -137,6 +144,36 @@ fun EditTaskSheet(
                 onCheckedChange = { hasReminder = it }
             )
         }
+        Box {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showRepeatMenu = true }
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Repeat")
+                Text(
+                    text = repeatInterval.label,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            DropdownMenu(
+                expanded = showRepeatMenu,
+                onDismissRequest = { showRepeatMenu = false }
+            ) {
+                RepeatInterval.entries.forEach { interval ->
+                    DropdownMenuItem(
+                        text = { Text(interval.label) },
+                        onClick = {
+                            repeatInterval = interval
+                            showRepeatMenu = false
+                        }
+                    )
+                }
+            }
+        }
         Spacer(Modifier.height(16.dp))
         Button(
             onClick = {
@@ -145,7 +182,8 @@ fun EditTaskSheet(
                         taskText,
                         selectedDateMillis.value,
                         selectedTimeMillis.value,
-                        hasReminder
+                        hasReminder,
+                        repeatInterval
                     )
                 }
             },
@@ -155,3 +193,4 @@ fun EditTaskSheet(
         }
     }
 }
+
